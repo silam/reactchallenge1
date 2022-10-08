@@ -10,21 +10,28 @@ function App() {
   const [counter, setCounter] = useState(0);
   const [randomUserData, setRandomUserData] = useState('');
 
-  useEffect = (()=>{
+  
 
-  }, []);
-
-  const fetchRandomUserData = () => {
-      axios.get(rundomUserAPI)
+  const  fetchRandomUserData =  () => {
+       return axios.get(rundomUserAPI)
       .then((response)=>{
           console.log(response.data.results);
-
-          setRandomUserData(JSON.stringify(response.data.results));
+          return response;
       })
       .catch((err)=>{
         console.log(err);
       })
   }
+
+  useEffect(()=>{
+    
+    fetchRandomUserData().then(res => {
+        console.log(res.data.results);
+        setRandomUserData(JSON.stringify(res.data.results) || 'No Data');
+
+    })
+
+  }, []);
 
 
   return (
@@ -43,11 +50,9 @@ function App() {
         </p>
 
         
-        <p>
-          <button onClick={()=>fetchRandomUserData()}>Fetch Random User</button>
-        </p>
+        
 
-        <label>{randomUserData}</label>
+        <label>User: {randomUserData}</label>
     </div>
   );
 }
