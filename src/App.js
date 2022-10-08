@@ -9,7 +9,7 @@ function App() {
 
   const [counter, setCounter] = useState(0);
   const [randomUserData, setRandomUserData] = useState('');
-
+  const [userInfos, setUserInfos] = useState([]);
   
 
   const  fetchRandomUserData =  () => {
@@ -24,14 +24,32 @@ function App() {
   }
 
   useEffect(()=>{
-    
+
     fetchRandomUserData().then(res => {
         console.log(res.data.results);
-        setRandomUserData(JSON.stringify(res.data.results) || 'No Data');
-
+        setRandomUserData(JSON.stringify(res.data.results, null, 2) || 'No Data');
+        
+        setUserInfos(res.data.results);
     })
 
   }, []);
+
+
+  const getFullUserName = (userInfo=>{
+    const {name: {first, last}} = userInfo;
+    const {picture: {large, medium, thumbnail}} = userInfo;
+
+    return (
+    <>
+    <img src={thumbnail}></img>
+    <h4>{first} {last}</h4>
+    
+    </>
+    );
+
+    
+  });
+
 
 
   return (
@@ -52,7 +70,15 @@ function App() {
         
         
 
-        <label>User: {randomUserData}</label>
+        
+        <p>
+          <label> 
+            {
+          userInfos.map((element, index)=>{
+            return getFullUserName(element)
+            })
+          }</label>
+        </p>
     </div>
   );
 }
