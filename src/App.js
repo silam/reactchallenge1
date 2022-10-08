@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -10,12 +9,12 @@ function App() {
   const [counter, setCounter] = useState(0);
   const [randomUserData, setRandomUserData] = useState('');
   const [userInfos, setUserInfos] = useState([]);
-  
+  const [pageNum, setPageNum] = useState(1);
 
-  const  fetchRandomUserData =  () => {
-       return axios.get(rundomUserAPI)
+  const  fetchRandomUserData =  (pagenum) => {
+       return axios.get(rundomUserAPI + `/?${pagenum}`)
       .then((response)=>{
-          console.log(response.data.results);
+          //console.log(response.data.results);
           return response;
       })
       .catch((err)=>{
@@ -25,32 +24,50 @@ function App() {
 
   useEffect(()=>{
 
-    fetchRandomUserData().then(res => {
-        console.log(res.data.results);
-        setRandomUserData(JSON.stringify(res.data.results, null, 2) || 'No Data');
+    fetchRandomUserData(0).then(res => {
+        //console.log(res.data.results);
+        //setRandomUserData(JSON.stringify(res.data.results, null, 2) || 'No Data');
         
         setUserInfos(res.data.results);
     })
 
-  }, []);
+  },[]);
 
 
   const getFullUserName = (userInfo=>{
-    const {name: {first, last}} = userInfo;
-    const {picture: {large, medium, thumbnail}} = userInfo;
 
-    return (
-    <>
-    <img src={thumbnail}></img>
-    <h4>{first} {last}</h4>
-    
-    </>
-    );
+    if ( userInfo !== undefined && userInfo !== null) 
+    {
+  
+      console.log(userInfo);
+      const {name: {first, last}} = userInfo;
+      const {picture: {large, medium, thumbnail}} = userInfo;
+      const {id: {name, value}} = userInfo;
+      return (
+      <p key={value}>
+        <img src={thumbnail} alt={first}></img>
+      <br />
+      <label>{first} {last}</label>
 
+      </p>
+      );
+    }
     
   });
 
 
+  const loadMoreUser = () => {
+
+    setPageNum(pageNum + 1);
+
+    fetchRandomUserData(pageNum)
+    .then((res)=>{
+
+      const moreUserInfo = [...userInfos, res.data.results[0]];
+      setUserInfos(moreUserInfo);
+
+    })
+  }
 
   return (
 
@@ -69,16 +86,17 @@ function App() {
 
         
         
+        <button onClick={()=> loadMoreUser()}>Load More User</button>
 
         
-        <p>
-          <label> 
+        <div>
+          
             {
           userInfos.map((element, index)=>{
             return getFullUserName(element)
             })
-          }</label>
-        </p>
+          }
+        </div>
     </div>
   );
 }

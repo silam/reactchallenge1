@@ -78,4 +78,10 @@ http://react.school
 1. Write a counter
 2. Use axios to fetch data from http://randomuser.me/api and show on brower 
 a random user as string
+3. Show only frist , last name and image thumbnail
+4. A button for pagination with same seed
+    https://randomuser.me/api/?page=3&results=10&seed=abc
 
+
+
+### Note: React 18: UseEffect called twice, fixed by remove React.StrickMode
