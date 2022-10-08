@@ -68,3 +68,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+#### References
+http://react.school
+
+
+## Challenges
+
+1. Write a counter
+2. Use axios to fetch data from http://randomuser.me/api and show on brower 
+a random user as string
+
